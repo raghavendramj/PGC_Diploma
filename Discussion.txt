@@ -1,0 +1,84 @@
+Spring Boot
+	Spring Data JPA
+	repository
+		DepartmentRepository extends JpaRepository<Department, Integer>
+	entity 
+		Department
+			@Id
+			@GeneratedValue(startegy=GenerationType.IDENTITY)
+			id, name, subject
+	model
+		Spring Security -> 
+	service -> C + R + U + D
+		DepartmentService (I)
+			getDepartments()
+			getDepartmentById(int departmentId)
+			getDepartmentByName(String name)
+			saveDepartment()
+
+			updateDepartment()			
+			deleteDepartment()			
+	controller
+		@GetMapping(/departments)
+		@GetMapping(/departments/{id}) > @PathVariable("id")
+		http://localhost:8083/departments/2
+			-> if id is not present
+				-> throw exception 
+			else
+				return the department				
+		@GetMapping(/departments/) -> @RequestParam -> name
+		http://localhost:8083/searchDepartments?name=CSE			
+		@PostMapping(/departments) -> @RequestBody
+			{
+				"name" : "IT",
+				"address":"Bangalore",
+				"code": "IT-05"
+			}
+		@PutMapping(/departments) -> @RequestBody
+		@DeletMapping(/departments/{id}) ->  @PathVariable("id")
+	Application
+		resources
+			application.properties
+			database url
+			database username
+			database password
+			dialect		
+-------------------------------
+1. Handle exceptions
+	@ControllerAdvice
+	@ExceptionHandler
+
+2. Spring Security
+	InMemory Authentication (HIGH)
+	Spring Boot + MySQL
+	JWT -> Authorization
+	
+	
+FrontEnd	
+	DepartmentServicec.js		
+		fetchDepartment(http)
+			Department
+			{
+				"id": "12",
+				"name":"raghav",
+				"subject":"Computers"
+			}
+			DTO : Data Transfer Objects.
+
+ 
+drop table if exists department;
+create table if not exists department (
+	id bigint primary key  auto_increment,
+	name varchar(20) default null,
+	code varchar(255) not null 
+)engine=innodb;
+select * from department;
+
+
+    private String name;
+    private String address;
+    private String code;
+
+
+
+	
