@@ -1,0 +1,86 @@
+Data Access and Service Layer
+----------------------------------
+Database:- MySQL/PostGres
+
+Link to create new spring boot project :- https://start.spring.io/
+
+Frameworks Used :-
+	Spring Data -> spring-boot-starter-data-jpa -> Database (MySQL)
+	Spring Boot -> spring-boot-starter
+	Spring Web -> spring-web -> Spring MVC implementations
+	
+Layers:-
+	-> Data Access Layer
+		@Entity
+		Student
+			-> id, firstName, lastName, emailId
+		
+		@Repository
+		StudentRepository(I) -> extends JpaRepository<Student, Long>
+		By Default => findById, findAll, save, deleteById, delete
+		Spring JPA Query Methods => https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
+			Student findByFirstNameAndLastName(String firstName, String lastName);
+			Student findByEmail(String email);
+		
+	-> Service Layer -> injecting StudentRepository dependency
+			@Service
+			StudentService(I)
+			C + R + U + D		
+			
+			C -> Student saveStudent(Student student); -> save(student);
+			
+			R ->	List<Student> getStudents(); -> findAll();
+			R -> Student getStudentByFullName(String firstName, String lastName); -> findByFirstNameAndLastName();
+			R -> Student getStudentByEmail(String email); -> findByEmail(String email);
+			
+			U -> Student updateStudent(Long id, Student student);
+			
+			D -> Student deleteStudent(Long id);
+			
+	-> Controller Layer -> injecting StudentService dependency
+		@RestController
+		StudentController			
+			@PostMapping("/students")
+			Student saveStudent(@RequestBody Student student);
+			POST -> http://localhost:8083/students
+			RequestBody -> { "firstName" : "Keshav", "lastName" : "Anand", "emailId" : "keshav.anand@gmail.com" }			
+			
+			@GetMapping("/students")
+			List<Student> getStudents();
+			URL -> http://localhost:8083/students
+			
+			@GetMapping("/students/{id}")
+			Student getStudentById(@PathVariable("id") Long id);
+			URL -> http://localhost:8083/students/2
+			
+			@GetMapping("/students/email/{emailId}")
+			Student getStudentById(@PathVariable("emailId") String email);
+			URL -> http://localhost:8083/students/email/keshav.anand@gmail.com
+			
+			@GetMapping("/students/search")
+			Student getStudentById(@RequestParam("firstName") String firstName, @RequestParam("lastName")String lastName);
+			URL -> http://localhost:8083/students/search?firstName=Suhas&lastName=kambli
+			
+			@PutMapping("/students/{id}")
+			Student updateStudent(@PathVariable("id") Long id, @RequestBody Student student)
+			URL ->  http://localhost:8083/students/3
+			RequestBody -> { "firstName" : "Suhas", "lastName" : "vavle", "emailId" : "suhas.vavle@gmail.com" }
+			
+			@DeleteMapping("/students/{id}")
+			Student deleteStudent(@PathVariable("id") Long id);
+			URL -> http://localhost:8083/students/5
+	
+	Database:
+		springdataaccess
+		create database springdataaccess;	
+		use springdataaccess;
+	
+Hibernate: 
+    
+    create table student (
+       id bigint not null auto_increment,
+        email_id varchar(255),
+        first_name varchar(255),
+        last_name varchar(255),
+        primary key (id)
+    ) engine=InnoDB
