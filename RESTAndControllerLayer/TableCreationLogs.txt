@@ -1,0 +1,49 @@
+Hibernate: 
+    
+    create table course (
+       course_id bigint not null auto_increment,
+        credit varchar(255),
+        title varchar(255),
+        teacher_id bigint,
+        primary key (course_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table map_student_course (
+       course_id bigint not null,
+        student_id bigint not null
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table student (
+       student_id bigint not null auto_increment,
+        first_name varchar(255),
+        last_name varchar(255),
+        primary key (student_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table teacher (
+       teacher_id bigint not null auto_increment,
+        first_name varchar(255),
+        last_name varchar(255),
+        primary key (teacher_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table course 
+       add constraint FKsybhlxoejr4j3teomm5u2bx1n 
+       foreign key (teacher_id) 
+       references teacher (teacher_id)
+Hibernate: 
+    
+    alter table map_student_course 
+       add constraint FKdqjnm00duulndnhl1nfpeix8q 
+       foreign key (student_id) 
+       references student (student_id)
+Hibernate: 
+    
+    alter table map_student_course 
+       add constraint FK24d8xpl6w01pr3ttqucy7klcc 
+       foreign key (course_id) 
+       references course (course_id)

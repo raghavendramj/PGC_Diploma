@@ -1,0 +1,81 @@
+REST and Controller layer
+
+Spring Boot
+	Controller Layer
+	Service Layer
+	Data Layer -> Dummy Data
+
+Step 1 :-
+	Creating Spring Boot Project :- https://start.spring.io/
+	Dependencies Selected :-
+		spring-web -> RestFul API's and Spring MVC implementations.
+		spring-boot-starter-data-jpa -> Database (MySQL) Operations
+		mysql-connector-java -> Driver for MySQL
+		lombok -> for reducing boilerplate code.
+
+-> Layers
+	-> Data Layer
+			@Entity
+			Student
+				-> id(PK:- Long), firstName, lastName, email
+			@Entity
+			Course
+				-> id, title, credit
+				-> Course N : 1 Teacher
+				-> Course N : N Student
+			@Entity
+			Teacher
+				-> id(PK:- Long), firstName, lastName, email
+				
+		Mappings
+			Course N : N Student
+			
+				map_student_course
+					-> course_id, student_id
+					-> 1, 1
+					-> 1, 1
+			
+			Course N : 1 Teacher
+
+		@Repository
+		StudentRepository(I) -> extends JpaRepository<Student, Long>
+		@Repository
+		CourseRepository(I)   -> extends JpaRepository<Course, Long>
+		@Repository
+		TeacherRepository(I)  -> extends JpaRepository<Teacher, Long>
+
+	-> Service -> Service Layer
+			@Service
+			StudentService
+				-> getStudents();
+				-> getStudents(Long id);
+				-> saveStudent(Student student);
+				-> deleteStudent(Long id);
+			@Service
+			CourseService
+					-> getCourses();
+					-> getCourses(Long id);
+					-> saveCourse(Course course);
+					-> deleteCourse(Long id);
+			@Service
+			TeacherService
+				-> getTeachers();
+				-> getTeachers(Long id);
+				-> saveTeacher(Teacher teacher);
+				-> deleteTeacher(Long id);
+
+		Controller Layer
+		@RestContoller
+		
+			@PostMapping("/students")
+			Student saveStudent(@RequestBody Student student);
+			
+			@GetMapping("/students")
+			List<Student> getStudents()
+			
+			@GetMapping("/students/{pathVarStudentId}")
+			Student getStudentById(@PathVariable("pathVarStudentId") Long studentId)
+			
+			@DeleteMapping("/students/{id}")
+			Student deleteStudent(@PathVariable("pathVarStudentId") Long studentId)
+			
