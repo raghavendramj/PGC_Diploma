@@ -1,0 +1,88 @@
+Data and Service layer
+-------------------------
+Database: MySQL
+
+https://start.spring.io/
+	Creating Spring Boot Project :- https://start.spring.io/
+	Dependencies Selected :-
+		spring-web -> RestFul API's and Spring MVC implementations.
+		spring-boot-starter-data-jpa -> Database (MySQL) Operations
+		mysql-connector-java -> Driver for MySQL
+		lombok -> for reducing boilerplate code.
+		
+Layers
+	-> Data Layer
+		@Entity
+		 Citizen
+			-> id, firstName, lastName, email
+			
+		@Repository
+		CitizenRepository -> JpaRepository<Citizen, Long>
+			By Default -> findAll, findById, save, deleteById
+			//https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
+			Citizen findByFirstNameAndLastName(String firstName,String lastName)
+			Citizen findByEmail(String email)
+			
+		-> Service Layer
+		@Service
+		CitizenService
+			C + R + U + D
+			
+			C -> Citizen saveCitizen(Citizen citizen);
+			
+			R -> List<Citizen> getCitizens();
+			R -> Citizen getCitizenById(Long id);
+			R -> Citizen getCitizebByFirstNameAndLastName(String firstName,String lastName);
+			R -> Citizen getCitizenByEmail(String email);
+			
+			U -> Citizen updateCitizen(Long id,  Citizen citizen);
+			D -> Citizen deleteCitizen(Long id);
+			
+		-> Controller Layer
+			@RestController
+			@RequestMapping("/citizens")
+			CitizenController
+				@PostMapping
+				Citizen saveCitizen(@RequestBody Citizen citizen);
+					I/P:-  Request Body :- { "firstName": "Lakshmi", "lastName": "Eshwar", "email": "lakshmi@gmail.com" }
+					URL:- http://localhost:8185/citizens
+					O/P:- { "id": 5, "firstName": "Lakshmi", "lastName": "Eshwar", "email": "lakshmi@gmail.com" }
+				
+				@GetMapping
+				List<Citizen> getCitizens();
+					URL:- http://localhost:8185/citizens
+					O/P:- [{ "id": 5, "firstName": "Lakshmi", "lastName": "Eshwar", "email": "lakshmi@gmail.com" }]
+				
+				@GetMapping("/{citizenId}")
+				Citizen getCitizenById(@PathVariable("citizenId") Long id);
+					URL:- http://localhost:8185/citizens/5
+					O/P:- { "id": 5, "firstName": "Lakshmi", "lastName": "Eshwar", "email": "lakshmi@gmail.com" }
+				
+				@GetMapping("/search")
+				Citizen getCitizenById(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName);
+					URL :- http://localhost:8185/citizens/search?firstName=Arjun&lastName=Singh
+					Output :- { "id": 3, "firstName": "Arjun", "lastName": "Singh", "email": "arjun@gmail.com" }
+				
+				@GetMapping("/byEmail/{email}")
+				Citizen getCitizenByEmail(@PathVariable("email") String email);
+					URL:- http://localhost:8185/citizens/email/kesahv@gmail.com
+					O/P:- { "id": 2, "firstName": "Keshav", "lastName": "Anand", "email": "kesahv@gmail.com" }
+				
+				@UpdateMapping("/{citizenId}")
+				Citizen updateCitizen(@PathVariable("citizenId") Long id, @RequestBody Citizen citizen);
+					URL:- http://localhost:8185/citizens/9
+					I/P:-  Request Body :- { "firstName": "Lakshmi", "lastName": "Eshwar", "email": "lakshmi@gmail.com" }
+					O/P:- updated object
+				
+				@DeleteMapping("/{citizenId}")
+				Citizen deleteCitizen(@PathVariable("citizenId") Long id);
+					URL:- http://localhost:8185/citizens/9
+					O/P:- Deleted object
+				
+	Database:-
+		create database springdatajpaservice;
+		
+				
+				
+	
+
