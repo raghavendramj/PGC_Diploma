@@ -1,0 +1,94 @@
+Data and Service layer
+-------------------------
+Database: MySQL
+
+https://start.spring.io/
+	Creating Spring Boot Project :- https://start.spring.io/
+	Dependencies Selected :-
+		spring-web -> RestFul API's and Spring MVC implementations.
+		spring-boot-starter-data-jpa -> Database (MySQL) Operations
+		mysql-connector-java -> Driver for MySQL
+		lombok -> for reducing boilerplate code.
+		
+Frameworks Used:
+	Spring Boot
+	Spring Data JPA		
+		
+Layers:
+	Data Access Layer
+		-> @Entity
+			 Product
+				-> id, name, price, quantity
+		-> @Repository
+			 ProductRepository
+				By Default -> findAll, findById, save, delete, deleteById, 
+				JPA Query Methods
+					-> List<Product> findByName(String name);
+					-> List<Product> findByPriceAndQuantity(int price, int quantity);
+					https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
+			
+	Service Layer	
+		->@Service -> C R U D
+		-> C Product addProduct(Product product); //save(entity);
+		
+		-> R List<Product> getProducts(); //findAll
+		-> R List<Product> getProductsByName(String name); //findByName [Query method]
+		-> R List<Product> getProductsByPriceAndQuantity(Long price, Long quantity); //findByPriceAndQuantity [Query method]
+		-> R Product getProductById(Long id); //findByPriceAndQuantity [Query method]
+		
+		-> U Product updateProduct(Long productId, Product product); //fetch + save 
+		-> D Product deleteProduct(Long productId); //deleteById
+		
+	Controller Layer
+		->@RestController
+			@RestMapping("/products")			
+			ProductController
+			
+			@PostMapping
+			Product addProduct(@ResponseBody Product product);
+				URL -> http://localhost:8185/products
+				RequestBody -> { "name": "Nandini", "price": 19, "quantity": "500" } 
+				Response -> { "id": 4,"name": "Nandini", "price": 19, "quantity": "500" } 
+			
+			@GetMapping
+			List<Product> getProducts();
+				URL -> http://localhost:8185/products
+				Response -> [{ "id": 4,"name": "Nandini", "price": 19, "quantity": "500" }]
+			
+			@GetMapping("/{productId}")
+			Product getProductById(@PathVariable("productId") Long productId)
+				URL -> http://localhost:8185/products/2
+				Response -> { "id": 2, "name": "Kurkure", "price": 10, "quantity": 100 }
+			
+			@GetMapping("/searchByName/{name}")
+			List<Product> getProductsByName(@PathVariable("name") String name);
+				http://localhost:8185/products/searchByName/Kurkure
+				Response -> { "id": 2, "name": "Kurkure", "price": 10, "quantity": 100 }
+			
+			@GetMapping("/searchByPriceAndQty")
+			List<Product> getProductsByName(@RequestParam("price") Long price, @RequestParam("qty") Long qty);
+				URL -> http://localhost:8185/products/searchByPriceAndQty?price=10&quantity=100
+				Response -> [ { "id": 1, "name": "Lays", "price": 10, "quantity": 100 }, { "id": 2, "name": "Kurkure", "price": 10, "quantity": 100 } ]
+			
+			@PutMapping("/{productId}")
+			Product udpateProduct(@PathVariable("productId"), @ResponseBody Product product)
+				URL :- http://localhost:8185/products/7
+				RequestBody -> { "id": 4, "name": "Nandini Milk", "price": 19, "quantity": "500" } 
+				Response -> { "id": 4,"name": "Nandini Milk", "price": 19, "quantity": "500" } 
+			
+			@DeleteMapping("/{productId}")
+				Product deleteProduct(@PathVariable("productId") Long productId) 
+				URL :- http://localhost:8185/products/7  
+			
+	Questions:
+		Please explain How @RestController will exposes methods within class on high level
+		A very basic question - how are entity, repository, service and controller related? What is the flow of the application/code?
+		
+			@Entity -> DB Rep
+			@Repository -> Communication channel
+			Controller -> @Service -> C -> Backend
+			
+		
+		
+
+	

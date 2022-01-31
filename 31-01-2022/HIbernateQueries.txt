@@ -1,0 +1,38 @@
+Hibernate: 
+    
+Creation of table:- 
+    create table product (
+       id bigint not null auto_increment,
+        name varchar(255),
+        price bigint,
+        quantity integer not null,
+        primary key (id)
+    ) engine=InnoDB
+	
+GetMapping	
+	select
+        product0_.id as id1_0_,
+        product0_.name as name2_0_,
+        product0_.price as price3_0_,
+        product0_.quantity as quantity4_0_ 
+    from
+        product product0_
+		
+Putmapping
+	insert 
+    into
+        product
+        (name, price, quantity) 
+    values
+        (?, ?, ?)
+		
+GetMapping By Id
+	select
+			product0_.id as id1_0_0_,
+			product0_.name as name2_0_0_,
+			product0_.price as price3_0_0_,
+			product0_.quantity as quantity4_0_0_ 
+		from
+			product product0_ 
+		where
+			product0_.id=?
